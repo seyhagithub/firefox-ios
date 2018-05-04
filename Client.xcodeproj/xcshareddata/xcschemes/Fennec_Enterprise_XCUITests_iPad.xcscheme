@@ -194,6 +194,12 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "DownloadFilesTests/testLongPressOnDownloadedFile()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testShareDownloadedFile()">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test

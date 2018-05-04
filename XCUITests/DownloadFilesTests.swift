@@ -13,15 +13,16 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(HomePanel_Downloads)
         waitforExistence(app.tables["DownloadsTable"])
         if (app.tables.cells.staticTexts[testFileName].exists) {
-            app.tables.cells.staticTexts[testFileName].swipeLeft()
-            app.tables.cells.buttons["Delete"].tap()
-
+            deleteItem(itemName: testFileName)
         }
         if (app.tables.cells.staticTexts[testFileName2].exists) {
-            app.tables.cells.staticTexts[testFileName2].swipeLeft()
-            app.tables.cells.buttons["Delete"].tap()
-
+            deleteItem(itemName: testFileName2)
         }
+    }
+
+    private func deleteItem(itemName: String) {
+        app.tables.cells.staticTexts[itemName].swipeLeft()
+        app.tables.cells.buttons["Delete"].tap()
     }
 
     func testDownloadFilesAppMenuFirstTime() {
@@ -50,7 +51,7 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables["DownloadsTable"].exists)
     }
 
-    func testDownloadAfile() {
+    func testDownloadFile() {
         downloadFile(fileName: testFileName)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
@@ -67,12 +68,8 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(HomePanel_Downloads)
         waitforExistence(app.tables["DownloadsTable"])
-        app.tables.cells.staticTexts[testFileName].swipeLeft()
 
-        XCTAssertTrue(app.tables.cells.buttons["Share"].exists)
-        XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
-
-        app.tables.cells.buttons["Delete"].tap()
+        deleteItem(itemName: testFileName)
         waitforNoExistence(app.tables.cells.staticTexts[testFileName])
 
         // After removing the number of items should be 0
@@ -93,16 +90,6 @@ class DownloadFilesTests: BaseTestCase {
         app.buttons["Cancel"].tap()
     }
 
-    private func downloadFile(fileName: String) {
-        navigator.openURL(testURL)
-        waitUntilPageLoad()
-
-        app.webViews.staticTexts[fileName].tap()
-        app.webViews.buttons["Download"].tap()
-        waitforExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells["download"].tap()
-    }
-
     func testLongPressOnDownloadedFile() {
         downloadFile(fileName: testFileName)
         navigator.goto(BrowserTabMenu)
@@ -112,6 +99,16 @@ class DownloadFilesTests: BaseTestCase {
         app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
         waitforExistence(app.otherElements["ActivityListView"])
         app.buttons["Cancel"].tap()
+     }
+
+    private func downloadFile(fileName: String) {
+        navigator.openURL(testURL)
+        waitUntilPageLoad()
+
+        app.webViews.staticTexts[fileName].tap()
+        app.webViews.buttons["Download"].tap()
+        waitforExistence(app.tables["Context Menu"])
+        app.tables["Context Menu"].cells["download"].tap()
     }
 
     func testDownloadMoreThanOneFile() {
