@@ -70,4 +70,24 @@ class PhotonActionSheetTest: BaseTestCase {
         waitforExistence(app.images["emptySync"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
+
+    func testSharePageWithShareSheetOptions() {
+        navigator.openURL("example.com")
+        navigator.goto(PageOptionsMenu)
+        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        waitforExistence(app.buttons["Copy"])
+        let moreElement = app.collectionViews.element(boundBy: 0).buttons.element(boundBy: app.collectionViews.element(boundBy: 0).buttons.count-5)
+        moreElement.tap()
+        app.switches["Fennec"].tap()
+        app.buttons["Done"].tap()
+        waitforExistence(app.buttons["Copy"])
+        let fennecElement = app.collectionViews.element(boundBy: 0).buttons.element(boundBy: app.collectionViews.element(boundBy: 0).buttons.count-6)
+        fennecElement.tap()
+        waitforExistence(app.navigationBars["ShareTo.ShareView"])
+        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
+        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
+        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
+        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
+        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
+    }
 }
